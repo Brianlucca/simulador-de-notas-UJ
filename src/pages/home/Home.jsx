@@ -1,6 +1,6 @@
 import React from "react";
-import GradeForm from "../grade-form/GradeForm";
-import History from "../history/History";
+import GradeForm from "../../components/grade-form/GradeForm";
+import History from "../../components/history/History";
 import Sidebar from "../../components/sidebar/Sidebar";
 
 const Home = () => {
