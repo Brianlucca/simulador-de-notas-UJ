@@ -1,3 +1,4 @@
+import { Share, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const History = () => {
@@ -8,11 +9,28 @@ const History = () => {
     setHistorico(dados);
   };
 
-  const excluirHistorico = (index) => {
+  const excluirHistorico = (id) => {
     const dados = JSON.parse(localStorage.getItem("historico")) || [];
-    dados.splice(index, 1);
-    localStorage.setItem("historico", JSON.stringify(dados));
-    carregarHistorico();
+    const novosDados = dados.filter((item) => item.id !== id);
+    localStorage.setItem("historico", JSON.stringify(novosDados));
+    setHistorico(novosDados);
+  };
+
+  const compartilharHistorico = async (item) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${item.titulo}`,
+          text: `Matéria: ${item.titulo}\nMédia: ${item.media}\nStatus: ${item.status}`,
+        });
+        alert("Histórico compartilhado com sucesso!");
+      } catch (error) {
+        console.error("Erro ao compartilhar:", error);
+        alert("Não foi possível compartilhar.");
+      }
+    } else {
+      alert("Compartilhamento não suportado neste dispositivo.");
+    }
   };
 
   useEffect(() => {
@@ -33,28 +51,41 @@ const History = () => {
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">Histórico de Notas</h2>
       {historico.length === 0 ? (
-        <p className="text-gray-500">Nenhuma matéria cadastrada.</p>
+        <p className="text-gray-500">Nenhuma matéria encontrada.</p>
       ) : (
         <ul className="divide-y divide-gray-200">
-          {historico
-            .slice()
-            .reverse()
-            .map((item, index) => (
-              <li key={index} className="py-2 flex justify-between items-center">
-                <div>
-                  <p><strong>Matéria:</strong> {item.titulo}</p>
-                  <p><strong>Média:</strong> {item.media}</p>
-                  <p><strong>Status:</strong> {item.status}</p>
-                  <small><strong>{item.data}</strong></small>
-                </div>
+          {historico.map((item) => (
+            <li key={item.id} className="py-2 flex justify-between items-center">
+              <div>
+                <p>
+                  <strong>Matéria:</strong> {item.titulo}
+                </p>
+                <p>
+                  <strong>Média:</strong> {item.media}
+                </p>
+                <p>
+                  <strong>Status:</strong> {item.status}
+                </p>
+                <small>
+                  <strong>{item.data}</strong>
+                </small>
+              </div>
+              <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <button
-                  onClick={() => excluirHistorico(index)}
-                  className="ml-4 text-red-600 hover:text-red-800"
+                  onClick={() => compartilharHistorico(item)}
+                  className="text-blue-600 hover:text-blue-800"
                 >
-                  Excluir
+                  <Share />
                 </button>
-              </li>
-            ))}
+                <button
+                  onClick={() => excluirHistorico(item.id)}
+                  className="text-red-600 hover:text-red-800"
+                >
+                  <Trash2 />
+                </button>
+              </div>
+            </li>
+          ))}
         </ul>
       )}
     </div>
