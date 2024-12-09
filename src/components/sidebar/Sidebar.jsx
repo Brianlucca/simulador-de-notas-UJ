@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, Home, History, Github, School, Phone } from "lucide-react";
+import { Menu, Home, History, Github, School, Phone, HistoryIcon } from "lucide-react";
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -42,6 +42,13 @@ const Sidebar = () => {
           >
             <School size={24} />
             {isExpanded && <span>FAQ Unijorge</span>}
+          </Link>
+          <Link
+            to="/historico"
+            className="flex items-center gap-4 px-4 py-2 hover:bg-blue-500 transition"
+          >
+            <HistoryIcon size={24} />
+            {isExpanded && <span>Histórico</span>}
           </Link>
         </nav>
         <div className="flex items-center justify-center mt-auto h-16 border-t border-blue-500">
