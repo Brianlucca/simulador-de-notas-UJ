@@ -44,8 +44,6 @@ const GradeForm = () => {
 
     if (primeiraAvaliacao === 0) {
       statusResult = "Reprovado! Porque você zerou os dois trabalhos!";
-    } else if (a2Final < 5) {
-      statusResult = "Reprovado! Porque você tirou a nota da Avaliação A2 menor que 5!";
     } else if (media < 6) {
       statusResult = "Reprovado! Porque a sua média foi menor que 6!";
     } else {
@@ -55,7 +53,14 @@ const GradeForm = () => {
     setResultado(media.toFixed(2));
     setStatus(statusResult);
 
-    const dadosMateria = { titulo, media: media.toFixed(2), status: statusResult, data: new Date().toLocaleString() };
+    const dadosMateria = { 
+      id: Date.now(),
+      titulo, 
+      media: media.toFixed(2), 
+      status: statusResult, 
+      data: new Date().toLocaleString() 
+    };
+
     const historico = JSON.parse(localStorage.getItem("historico")) || [];
     historico.push(dadosMateria);
     localStorage.setItem("historico", JSON.stringify(historico));
