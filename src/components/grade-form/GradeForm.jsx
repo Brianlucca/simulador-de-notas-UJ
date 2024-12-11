@@ -11,13 +11,45 @@ const GradeForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "trab1") setTrab1(value);
-    if (name === "trab2") setTrab2(value);
-    if (name === "a2") setA2(value);
-    if (name === "a3") setA3(value);
+
+    switch (name) {
+      case "trab1":
+        setTrab1(value);
+        break;
+      case "trab2":
+        setTrab2(value);
+        break;
+      case "a2":
+        setA2(value);
+        break;
+      case "a3":
+        setA3(value);
+        break;
+      default:
+        break;
+    }
   };
 
   const calcularMedia = () => {
+    const inputs = [
+      { nome: "Trabalho 1", valor: parseFloat(trab1) || 0 },
+      { nome: "Trabalho 2", valor: parseFloat(trab2) || 0 },
+      { nome: "Avaliação A2", valor: parseFloat(a2) || 0 },
+      { nome: "Avaliação A3", valor: parseFloat(a3) || 0 },
+    ];
+
+    const valoresInvalidos = inputs.filter(
+      (input) => input.valor < 0 || input.valor > 10
+    );
+
+    if (valoresInvalidos.length > 0) {
+      const alerta = valoresInvalidos
+        .map((input) => `${input.nome} deve estar entre 0 e 10.`)
+        .join("\n");
+      alert(alerta);
+      return;
+    }
+
     const trab1Value = parseFloat(trab1) || 0;
     const trab2Value = parseFloat(trab2) || 0;
     const a2Value = parseFloat(a2) || 0;
@@ -53,12 +85,12 @@ const GradeForm = () => {
     setResultado(media.toFixed(2));
     setStatus(statusResult);
 
-    const dadosMateria = { 
+    const dadosMateria = {
       id: Date.now(),
-      titulo, 
-      media: media.toFixed(2), 
-      status: statusResult, 
-      data: new Date().toLocaleString() 
+      titulo,
+      media: media.toFixed(2),
+      status: statusResult,
+      data: new Date().toLocaleString(),
     };
 
     const historico = JSON.parse(localStorage.getItem("historico")) || [];
@@ -71,6 +103,9 @@ const GradeForm = () => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">Simular Média</h2>
+      <p className="mb-4 text-sm text-gray-700">
+        Atenção: As notas devem estar entre 0 e 10. Por exemplo, insira 7.5 para 75%.
+      </p>
       <input
         type="text"
         placeholder="Título da Matéria"
