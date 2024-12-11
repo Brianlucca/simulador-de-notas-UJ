@@ -21,7 +21,7 @@ const History = () => {
       try {
         await navigator.share({
           title: `${item.titulo}`,
-          text: `Confira minha média da matéria ${item.titulo}\n\nMédia Final: ${item.media}\nResultado: ${item.status}\n`,
+          text: `Confira minha média da matéria ${item.titulo}\n\nMédia Final: ${item.media}\nResultado: ${item.status}\n\n`,
           url: window.location.href,
         });
         alert("Histórico compartilhado com sucesso!");
